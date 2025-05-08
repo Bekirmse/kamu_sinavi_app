@@ -1,5 +1,4 @@
 // ignore_for_file: deprecated_member_use
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:wiredash/wiredash.dart';
@@ -23,7 +22,6 @@ class TestScreen extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
   _TestScreenState createState() => _TestScreenState();
 }
 
@@ -77,22 +75,24 @@ class _TestScreenState extends State<TestScreen>
 
   @override
   Widget build(BuildContext context) {
-    bool isTablet = MediaQuery.of(context).size.width > 600;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isTablet = MediaQuery.of(context).size.width > 600;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? const Color(0xFF121212) : Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: isDark ? const Color(0xFF1C1C1C) : Colors.white,
         elevation: 2,
         title: Text(
           widget.testName,
           style: TextStyle(
-            color: Colors.black,
+            color: isDark ? Colors.white : Colors.black,
             fontWeight: FontWeight.bold,
             fontSize: isTablet ? 25 : 20,
           ),
         ),
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: isDark ? Colors.white : Colors.black),
         actions: widget.isTimerEnabled
             ? [
                 Padding(
@@ -116,108 +116,128 @@ class _TestScreenState extends State<TestScreen>
         child: ListView.builder(
           itemCount: _shuffledQuestions.length,
           itemBuilder: (context, index) {
-            return _buildQuestionCard(index, _shuffledQuestions[index]);
+            return _buildQuestionCard(
+                context, index, _shuffledQuestions[index], isDark);
           },
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
-        child: ElevatedButton.icon(
-          onPressed: _navigateToResultScreen,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blueAccent,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-          icon: const Icon(Icons.check_circle, color: Colors.white),
-          label: const Text(
-            "Testi Bitir",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: _selectedAnswers.length == _shuffledQuestions.length
+                    ? _navigateToResultScreen
+                    : null,
+                icon: const Icon(Icons.check_circle_outline),
+                label: const Text(
+                  "Testi Bitir",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: Colors.indigo,
+                  foregroundColor: Colors.white,
+                  disabledBackgroundColor: Colors.grey.shade300,
+                  disabledForegroundColor: Colors.grey.shade600,
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
+          const SizedBox(height: 20),
+        ],
       ),
     );
   }
 
-  Widget _buildQuestionCard(int index, Question question) {
-    bool isTablet = MediaQuery.of(context).size.width > 600;
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-      shape: RoundedRectangleBorder(
+  Widget _buildQuestionCard(
+      BuildContext context, int index, Question question, bool isDark) {
+    final selected = _selectedAnswers[question];
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.indigo.shade50,
         borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: isDark ? Colors.black26 : Colors.indigo.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          )
+        ],
       ),
-      elevation: 5,
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
+            padding: const EdgeInsets.only(right: 8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${index + 1}. ${question.question}',
+                  'Soru ${index + 1}',
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.indigo,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  question.question,
                   style: TextStyle(
-                    fontSize: isTablet ? 22 : 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
+                    fontSize: 16,
+                    color: isDark ? Colors.white : Colors.black,
                   ),
                 ),
                 const SizedBox(height: 12),
-                ...question.options.map((option) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            _selectedAnswers[question] = option;
-                          });
-                        },
-                        borderRadius: BorderRadius.circular(8),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: _selectedAnswers[question] == option
-                                ? Colors.blueAccent.withOpacity(0.1)
-                                : Colors.transparent,
-                            border: Border.all(
-                              color: _selectedAnswers[question] == option
-                                  ? Colors.blueAccent
-                                  : Colors.grey.shade300,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: ListTile(
-                            dense: true,
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 4),
-                            leading: Radio<String>(
-                              value: option,
-                              groupValue: _selectedAnswers[question],
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedAnswers[question] = value!;
-                                });
-                              },
-                              activeColor: Colors.blueAccent,
-                            ),
-                            title: Text(
-                              option,
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                          ),
+                ...question.options.map((option) {
+                  final isSelected = selected == option;
+                  return Container(
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color:
+                            isSelected ? Colors.indigo : Colors.grey.shade300,
+                        width: 1.5,
+                      ),
+                      color: isSelected
+                          ? (isDark
+                              ? Colors.indigo.withOpacity(0.3)
+                              : Colors.indigo.shade100)
+                          : (isDark ? const Color(0xFF2C2C2C) : Colors.white),
+                    ),
+                    child: ListTile(
+                      dense: true,
+                      title: Text(
+                        option,
+                        style: TextStyle(
+                          color: isDark ? Colors.white : Colors.black,
                         ),
                       ),
-                    )),
+                      onTap: () {
+                        setState(() {
+                          _selectedAnswers[question] = option;
+                        });
+                      },
+                    ),
+                  );
+                }),
               ],
             ),
           ),
-          // Hatalı soru bildir ikonu
           Positioned(
-            right: 0,
-            top: 0,
+            right: -13,
+            top: -13,
             child: IconButton(
               icon:
                   const Icon(Icons.report_problem_outlined, color: Colors.red),

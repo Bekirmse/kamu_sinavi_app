@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, prefer_const_constructors
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -117,11 +117,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     Color getCheckColor(bool condition) =>
         condition ? Colors.green : Colors.grey;
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: isDark ? const Color(0xFF121212) : Colors.grey.shade50,
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -131,27 +133,34 @@ class _RegisterPageState extends State<RegisterPage> {
             children: [
               const Icon(Icons.person_add, size: 80, color: Colors.blueAccent),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 "Yeni Hesap Oluştur",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Colors.white : Colors.black,
+                ),
               ),
               const SizedBox(height: 32),
               TextField(
                 controller: _fullNameController,
-                decoration: _inputDecoration("Ad Soyad"),
+                style: TextStyle(color: isDark ? Colors.white : Colors.black),
+                decoration: _inputDecoration("Ad Soyad", isDark),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _emailController,
-                decoration: _inputDecoration("E-posta adresi"),
+                style: TextStyle(color: isDark ? Colors.white : Colors.black),
+                decoration: _inputDecoration("E-posta adresi", isDark),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _passwordController,
                 onChanged: _validatePassword,
                 obscureText: _obscurePassword,
-                decoration: _inputDecoration("Şifre").copyWith(
+                style: TextStyle(color: isDark ? Colors.white : Colors.black),
+                decoration: _inputDecoration("Şifre", isDark).copyWith(
                   suffixIcon: IconButton(
                     icon: Icon(_obscurePassword
                         ? Icons.visibility_off
@@ -200,7 +209,8 @@ class _RegisterPageState extends State<RegisterPage> {
               TextField(
                 controller: _confirmPasswordController,
                 obscureText: _obscurePassword,
-                decoration: _inputDecoration("Şifre Tekrar"),
+                style: TextStyle(color: isDark ? Colors.white : Colors.black),
+                decoration: _inputDecoration("Şifre Tekrar", isDark),
               ),
               const SizedBox(height: 20),
               Row(
@@ -213,7 +223,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Expanded(
                     child: RichText(
                       text: TextSpan(
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.blueAccent,
                           decoration: TextDecoration.underline,
                         ),
@@ -224,11 +234,11 @@ class _RegisterPageState extends State<RegisterPage> {
                               ..onTap = () => launchUrl(Uri.parse(
                                   'https://sites.google.com/view/kullanicisozlesmesi/ana-sayfa')),
                           ),
-                          const TextSpan(
+                          TextSpan(
                             text: " ve ",
                             style: TextStyle(
                               decoration: TextDecoration.none,
-                              color: Colors.black87,
+                              color: isDark ? Colors.white70 : Colors.black87,
                             ),
                           ),
                           TextSpan(
@@ -237,11 +247,11 @@ class _RegisterPageState extends State<RegisterPage> {
                               ..onTap = () => launchUrl(Uri.parse(
                                   'https://sites.google.com/view/kamucepsorubankasi/ana-sayfa')),
                           ),
-                          const TextSpan(
+                          TextSpan(
                             text: "'nı kabul ediyorum.",
                             style: TextStyle(
                               decoration: TextDecoration.none,
-                              color: Colors.black87,
+                              color: isDark ? Colors.white70 : Colors.black87,
                             ),
                           ),
                         ],
@@ -287,10 +297,15 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  InputDecoration _inputDecoration(String label) => InputDecoration(
+  InputDecoration _inputDecoration(String label, bool isDark) =>
+      InputDecoration(
         labelText: label,
+        labelStyle:
+            TextStyle(color: isDark ? Colors.white70 : Colors.grey.shade700),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         contentPadding:
             const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        fillColor: isDark ? const Color(0xFF2A2A2A) : Colors.white,
+        filled: true,
       );
 }

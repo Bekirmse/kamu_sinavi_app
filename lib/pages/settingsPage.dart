@@ -243,13 +243,13 @@ class _SettingsPageState extends State<SettingsPage> {
                 leading: Icon(Icons.delete_forever,
                     color: user != null
                         ? Colors.red
-                        : Color.fromARGB(255, 239, 132, 124)),
+                        : Color.fromARGB(255, 255, 17, 0)),
                 title: Text(
                   "Hesabı Kalıcı Olarak Sil",
                   style: TextStyle(
                     color: user != null
                         ? Colors.red
-                        : const Color.fromARGB(255, 239, 132, 124),
+                        : const Color.fromARGB(255, 255, 17, 0),
                   ),
                 ),
                 onTap: user != null ? _confirmAccountDeletion : null,

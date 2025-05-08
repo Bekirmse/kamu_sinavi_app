@@ -6,61 +6,64 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 // Bildirim panelini alttan kayan şekilde gösteren fonksiyon
 void showNotificationsPanel(BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+
   showModalBottomSheet(
     context: context,
-    isScrollControlled: true, // Panel ekranın büyük kısmını kaplayabilsin
+    isScrollControlled: true,
+    backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
     ),
     builder: (BuildContext context) {
       return FractionallySizedBox(
-        heightFactor: 0.8, // Ekranın %80’ini kaplayacak
+        heightFactor: 0.8,
         child: Container(
           padding: const EdgeInsets.all(16.0),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+            borderRadius: const BorderRadius.vertical(
               top: Radius.circular(16.0),
             ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Panel başlığı
-              const Text(
+              Text(
                 "Bildirimler",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: isDark ? Colors.white : Colors.black,
                 ),
               ),
               const SizedBox(height: 8),
-              const Divider(), // İnce çizgi
-
-              // 🔔 Bildirimlerin listelendiği alan
+              Divider(
+                  color: isDark ? Colors.grey.shade700 : Colors.grey.shade300),
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
-                      .collection(
-                          'notifications') // Firestore'daki bildirim koleksiyonu
-                      .orderBy('timestamp',
-                          descending: true) // En son gelenler en üstte
+                      .collection('notifications')
+                      .orderBy('timestamp', descending: true)
                       .snapshots(),
                   builder: (context, snapshot) {
-                    // Veri bekleniyorsa yükleme animasyonu göster
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     }
 
-                    // Veri yoksa uyarı göster
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                      return const Center(child: Text("Henüz bildirim yok."));
+                      return Center(
+                        child: Text(
+                          "Henüz bildirim yok.",
+                          style: TextStyle(
+                            color: isDark ? Colors.white70 : Colors.black54,
+                          ),
+                        ),
+                      );
                     }
 
                     final docs = snapshot.data!.docs;
 
-                    // Bildirimleri listele
                     return ListView.builder(
                       itemCount: docs.length,
                       itemBuilder: (context, index) {
@@ -73,9 +76,17 @@ void showNotificationsPanel(BuildContext context) {
                           ),
                           title: Text(
                             data['title'] ?? '',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: isDark ? Colors.white : Colors.black,
+                            ),
                           ),
-                          subtitle: Text(data['subtitle'] ?? ''),
+                          subtitle: Text(
+                            data['subtitle'] ?? '',
+                            style: TextStyle(
+                              color: isDark ? Colors.white70 : Colors.black87,
+                            ),
+                          ),
                         );
                       },
                     );

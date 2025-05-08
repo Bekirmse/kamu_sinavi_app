@@ -82,6 +82,7 @@ class _MessageToAdminPageState extends State<MessageToAdminPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     if (user == null) {
       return const Scaffold(
         body: Center(child: Text("Giriş yapmalısınız.")),
@@ -91,11 +92,20 @@ class _MessageToAdminPageState extends State<MessageToAdminPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Canlı Destek"),
-        titleTextStyle: const TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black),
+        titleTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white
+              : Colors.black,
+        ),
         elevation: 2,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: Theme.of(context).brightness == Brightness.dark
+            ? const Color(0xFF1C1C1C)
+            : Colors.white,
+        foregroundColor: Theme.of(context).brightness == Brightness.dark
+            ? Colors.white
+            : Colors.black,
       ),
       body: Column(
         children: [
@@ -136,11 +146,14 @@ class _MessageToAdminPageState extends State<MessageToAdminPage> {
           ),
 
           const Divider(height: 1),
+
           Container(
             decoration: BoxDecoration(
-              color: Colors.grey[100],
+              color: isDark ? const Color(0xFF1E1E1E) : Colors.grey[100],
               border: Border(
-                top: BorderSide(color: Colors.grey.shade300),
+                top: BorderSide(
+                  color: isDark ? Colors.grey.shade800 : Colors.grey.shade300,
+                ),
               ),
             ),
             child: SafeArea(
@@ -154,7 +167,11 @@ class _MessageToAdminPageState extends State<MessageToAdminPage> {
                     IconButton(
                       icon: Icon(
                         Icons.emoji_emotions_outlined,
-                        color: _isEmojiVisible ? Colors.indigo : Colors.grey,
+                        color: _isEmojiVisible
+                            ? Colors.indigo
+                            : isDark
+                                ? Colors.grey[400]
+                                : Colors.grey,
                       ),
                       onPressed: () {
                         FocusScope.of(context).unfocus();
@@ -167,17 +184,27 @@ class _MessageToAdminPageState extends State<MessageToAdminPage> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 10),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: Colors.grey.shade300),
+                          color:
+                              isDark ? const Color(0xFF2A2A2A) : Colors.white,
+                          border: Border.all(
+                            color: isDark
+                                ? Colors.grey.shade700
+                                : Colors.grey.shade300,
+                          ),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: TextField(
                           controller: _messageController,
                           focusNode: _focusNode,
+                          style: TextStyle(
+                              color: isDark ? Colors.white : Colors.black87),
                           minLines: 1,
                           maxLines: 4,
-                          decoration: const InputDecoration.collapsed(
+                          decoration: InputDecoration.collapsed(
                             hintText: "Mesajınızı yazın...",
+                            hintStyle: TextStyle(
+                              color: isDark ? Colors.white54 : Colors.grey,
+                            ),
                           ),
                         ),
                       ),

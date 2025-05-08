@@ -1216,208 +1216,219 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   Widget buildPracticeExamForm() {
     final titleController = TextEditingController();
-    final durationController = TextEditingController();
     final List<QuestionForm> questions = [QuestionForm()];
+    final topicController = TextEditingController();
 
     return Padding(
-      padding: const EdgeInsets.all(16),
-      child: StatefulBuilder(
-        builder: (context, setState) => ListView(
-          children: [
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Deneme Sınavı Başlat",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: titleController,
-                      decoration: const InputDecoration(
-                          labelText: "Sınav Başlığı",
-                          border: OutlineInputBorder()),
-                    ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: durationController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                          labelText: "Süre (dakika)",
-                          border: OutlineInputBorder()),
-                    ),
-                    const SizedBox(height: 24),
-                    const Text("Sorular", style: TextStyle(fontSize: 16)),
-                    const SizedBox(height: 8),
-                    ...questions.asMap().entries.map((entry) {
-                      final i = entry.key;
-                      final question = entry.value;
-
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text("Soru ${i + 1}",
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold)),
-                              const Spacer(),
-                              IconButton(
-                                icon: const Icon(Icons.delete_forever,
-                                    color: Colors.red),
-                                onPressed: () {
-                                  setState(() {
-                                    questions.removeAt(i);
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          TextField(
-                            controller: question.topicController,
-                            decoration: const InputDecoration(
-                                labelText: "Konu Başlığı",
-                                border: OutlineInputBorder()),
-                          ),
-                          const SizedBox(height: 8),
-                          TextField(
-                            controller: question.questionController,
-                            decoration: const InputDecoration(
-                                labelText: "Soru Metni",
-                                border: OutlineInputBorder()),
-                          ),
-                          const SizedBox(height: 8),
-                          ...List.generate(4, (j) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 8),
-                              child: TextField(
-                                controller: question.optionControllers[j],
-                                decoration: InputDecoration(
-                                  labelText:
-                                      "Şık ${String.fromCharCode(65 + j)}",
-                                  border: const OutlineInputBorder(),
-                                ),
-                                onChanged: (_) {
-                                  setState(() {});
-                                },
-                              ),
-                            );
-                          }),
-                          DropdownButtonFormField<String>(
-                            value: question.correctAnswer.isNotEmpty
-                                ? question.correctAnswer
-                                : null,
-                            decoration:
-                                const InputDecoration(labelText: "Doğru Cevap"),
-                            items: question.optionControllers
-                                .map((c) => c.text.trim())
-                                .where((text) => text.isNotEmpty)
-                                .map((text) => DropdownMenuItem(
-                                    value: text, child: Text(text)))
-                                .toList(),
-                            onChanged: (val) => setState(
-                                () => question.correctAnswer = val ?? ""),
-                          ),
-                          const Divider(),
-                        ],
-                      );
-                    }),
-                    const SizedBox(height: 10),
-                    Center(
-                      child: ElevatedButton.icon(
-                        icon: const Icon(Icons.add),
-                        label: const Text("Soru Ekle"),
-                        onPressed: () {
-                          setState(() => questions.add(QuestionForm()));
-                        },
+        padding: const EdgeInsets.all(16),
+        child: StatefulBuilder(
+          builder: (context, setState) => ListView(
+            children: [
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("Deneme Sınavı Başlat",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: titleController,
+                        decoration: const InputDecoration(
+                            labelText: "Sınav Başlığı",
+                            border: OutlineInputBorder()),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    Center(
-                      child: ElevatedButton.icon(
-                        onPressed: () async {
-                          final title = titleController.text.trim();
-                          final duration =
-                              int.tryParse(durationController.text.trim()) ?? 0;
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: topicController,
+                        decoration: const InputDecoration(
+                            labelText: "Konu Başlığı",
+                            border: OutlineInputBorder()),
+                      ),
+                      const SizedBox(height: 24),
+                      const Text("Sorular", style: TextStyle(fontSize: 16)),
+                      const SizedBox(height: 8),
+                      ...questions.asMap().entries.map((entry) {
+                        final i = entry.key;
+                        final question = entry.value;
 
-                          if (title.isEmpty || duration <= 0) return;
-
-                          final List<Map<String, dynamic>> preparedQuestions =
-                              [];
-
-                          for (final q in questions) {
-                            final question = q.questionController.text.trim();
-                            final topic = q.topicController.text.trim();
-                            final options = q.optionControllers
-                                .map((e) => e.text.trim())
-                                .toList();
-                            final answer = q.correctAnswer;
-
-                            if (question.isEmpty ||
-                                topic.isEmpty ||
-                                options.any((o) => o.isEmpty) ||
-                                answer.isEmpty) continue;
-
-                            preparedQuestions.add({
-                              'question': question,
-                              'options': options,
-                              'answer': answer,
-                              'topic': topic,
-                            });
-                          }
-
-                          if (preparedQuestions.isEmpty) return;
-
-                          await FirebaseFirestore.instance
-                              .collection('practice_exams')
-                              .doc('active_exam')
-                              .set({
-                            'title': title,
-                            'duration': duration,
-                            'questions': preparedQuestions,
-                            'created_at': FieldValue.serverTimestamp(),
-                            'end_time': Timestamp.fromDate(
-                                DateTime.now().add(const Duration(hours: 24))),
-                          });
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text("Deneme sınavı başlatıldı.")),
-                          );
-
-                          setState(() {
-                            titleController.clear();
-                            durationController.clear();
-                            questions.clear();
-                            questions.add(QuestionForm());
-                          });
-                        },
-                        icon: const Icon(Icons.play_arrow),
-                        label: const Text("Sınavı Başlat"),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.indigo,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 32),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12)),
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text("Soru ${i + 1}",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold)),
+                                const Spacer(),
+                                IconButton(
+                                  icon: const Icon(Icons.delete_forever,
+                                      color: Colors.red),
+                                  onPressed: () {
+                                    setState(() => questions.removeAt(i));
+                                  },
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            TextField(
+                              controller: question.questionController,
+                              decoration: const InputDecoration(
+                                  labelText: "Soru Metni",
+                                  border: OutlineInputBorder()),
+                            ),
+                            const SizedBox(height: 8),
+                            ...List.generate(4, (j) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                child: TextField(
+                                  controller: question.optionControllers[j],
+                                  decoration: InputDecoration(
+                                    labelText:
+                                        "Şık ${String.fromCharCode(65 + j)}",
+                                    border: const OutlineInputBorder(),
+                                  ),
+                                  onChanged: (_) => setState(() {}),
+                                ),
+                              );
+                            }),
+                            DropdownButtonFormField<String>(
+                              value: question.correctAnswer.isNotEmpty
+                                  ? question.correctAnswer
+                                  : null,
+                              decoration: const InputDecoration(
+                                  labelText: "Doğru Cevap"),
+                              items: question.optionControllers
+                                  .map((c) => c.text.trim())
+                                  .where((text) => text.isNotEmpty)
+                                  .map((text) => DropdownMenuItem(
+                                      value: text, child: Text(text)))
+                                  .toList(),
+                              onChanged: (val) => setState(
+                                  () => question.correctAnswer = val ?? ""),
+                            ),
+                            const Divider(),
+                          ],
+                        );
+                      }),
+                      const SizedBox(height: 10),
+                      Center(
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.add),
+                          label: const Text("Soru Ekle"),
+                          onPressed: () {
+                            setState(() => questions.add(QuestionForm()));
+                          },
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 20),
+                      Center(
+                        child: ElevatedButton.icon(
+                          onPressed: () async {
+                            final title = titleController.text.trim();
+                            final topic = topicController.text.trim();
+
+                            if (title.isEmpty || topic.isEmpty) return;
+
+                            final List<Map<String, dynamic>> preparedQuestions =
+                                [];
+
+                            for (final q in questions) {
+                              final question = q.questionController.text.trim();
+                              final options = q.optionControllers
+                                  .map((e) => e.text.trim())
+                                  .toList();
+                              final answer = q.correctAnswer;
+
+                              if (question.isEmpty ||
+                                  options.any((o) => o.isEmpty) ||
+                                  answer.isEmpty) continue;
+
+                              preparedQuestions.add({
+                                'question': question,
+                                'options': options,
+                                'answer': answer,
+                                'topic': topic,
+                              });
+                            }
+
+                            if (preparedQuestions.isEmpty) return;
+
+                            await FirebaseFirestore.instance
+                                .collection('practice_exams')
+                                .doc('active_exam')
+                                .set({
+                              'title': title,
+                              'questions': preparedQuestions,
+                              'created_at': FieldValue.serverTimestamp(),
+                              'end_time': Timestamp.fromDate(DateTime.now()
+                                  .add(const Duration(hours: 24))),
+                            });
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Deneme sınavı başlatıldı.")),
+                            );
+
+                            setState(() {
+                              titleController.clear();
+                              topicController.clear();
+                              questions.clear();
+                              questions.add(QuestionForm());
+                            });
+                          },
+                          icon: const Icon(Icons.play_arrow),
+                          label: const Text("Sınavı Başlat"),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.indigo,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 32),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Center(
+                        child: TextButton.icon(
+                          onPressed: () async {
+                            await FirebaseFirestore.instance
+                                .collection('practice_exams')
+                                .doc('active_exam')
+                                .delete();
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Deneme sınavı kaldırıldı.")),
+                            );
+
+                            setState(() {
+                              titleController.clear();
+                              topicController.clear();
+                              questions.clear();
+                              questions.add(QuestionForm());
+                            });
+                          },
+                          icon: const Icon(Icons.delete_forever),
+                          label: const Text("Sınavı Kaldır"),
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
+            ],
+          ),
+        ));
   }
 
   @override

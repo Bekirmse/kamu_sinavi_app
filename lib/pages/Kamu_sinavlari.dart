@@ -127,23 +127,43 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
 
   Widget _buildDrawer() {
     final user = FirebaseAuth.instance.currentUser;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Drawer(
+      backgroundColor: isDark ? const Color(0xFF121212) : Colors.white,
       child: Column(
         children: [
-          DrawerHeader(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF3F51B5), Color(0xFF5C6BC0)],
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: isDark ? Colors.indigo.shade700 : Colors.indigo,
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(24),
+                bottomRight: Radius.circular(24),
               ),
             ),
-            child: Center(
-              child: Image.asset(
-                'assets/icons/kamucepicon.png',
-                height: 100,
-              ),
+            child: Column(
+              children: [
+                const SizedBox(height: 40),
+                Image.asset(
+                  'assets/icons/kamucepicon.png',
+                  height: 60,
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  "KamuCEP",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 5,
+                  ),
+                ),
+              ],
             ),
           ),
+          const SizedBox(height: 8),
           Expanded(
             child: ListView(
               padding: EdgeInsets.zero,
@@ -152,7 +172,7 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
                   icon: Icons.shuffle,
                   text: "Kendi Testini Oluştur",
                   onTap: () {
-                    HapticFeedback.mediumImpact(); // Telefon titrer
+                    HapticFeedback.mediumImpact();
                     Navigator.pop(context);
                     Navigator.push(
                       context,
@@ -162,30 +182,17 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
                   },
                 ),
                 _buildDrawerTile(
-                  icon: Icons.support,
-                  text: "Destek Al veya Sorun Bildir",
-                  onTap: () {
-                    HapticFeedback.mediumImpact(); // Telefon titrer
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => const MessageToAdminPage()),
-                    );
-                  },
-                ),
-                _buildDrawerTile(
                   icon: Icons.quiz,
                   text: "Deneme Sınavı",
-                  onTap: () async {
-                    HapticFeedback.mediumImpact(); // Telefon titrer
+                  onTap: () {
+                    HapticFeedback.mediumImpact();
+                    Navigator.pop(context);
                     if (user == null) {
                       showDialog(
                         context: context,
-                        builder: (context) => _buildLoginDialog(context),
+                        builder: (_) => _buildLoginDialog(context),
                       );
                     } else {
-                      Navigator.pop(context);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -195,10 +202,23 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
                   },
                 ),
                 _buildDrawerTile(
+                  icon: Icons.chat,
+                  text: "Canlı Destek",
+                  onTap: () {
+                    HapticFeedback.mediumImpact();
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const MessageToAdminPage()),
+                    );
+                  },
+                ),
+                _buildDrawerTile(
                   icon: Icons.notifications_active,
                   text: "Bildirimler",
                   onTap: () {
-                    HapticFeedback.mediumImpact(); // Telefon titrer
+                    HapticFeedback.mediumImpact();
                     Navigator.pop(context);
                     showNotificationsPanel(context);
                   },
@@ -207,19 +227,19 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
                   icon: Icons.note_alt_outlined,
                   text: "Notlarım",
                   onTap: () {
-                    HapticFeedback.mediumImpact(); // Telefon titrer
+                    HapticFeedback.mediumImpact();
                     Navigator.pop(context);
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const NotlarimScreen()));
+                      context,
+                      MaterialPageRoute(builder: (_) => const NotlarimScreen()),
+                    );
                   },
                 ),
                 _buildDrawerTile(
                   icon: Icons.history,
                   text: "Geçmiş",
                   onTap: () {
-                    HapticFeedback.mediumImpact(); // Telefon titrer
+                    HapticFeedback.mediumImpact();
                     Navigator.pop(context);
                     Navigator.push(
                       context,
@@ -232,7 +252,7 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
                   icon: Icons.settings,
                   text: "Ayarlar",
                   onTap: () {
-                    HapticFeedback.mediumImpact(); // Telefon titrer
+                    HapticFeedback.mediumImpact();
                     Navigator.pop(context);
                     Navigator.push(
                       context,
@@ -257,45 +277,43 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
   Widget _buildTestButton(String topicName) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Stack(
-      children: [
-        GestureDetector(
-          onTap: () {
-            HapticFeedback.mediumImpact(); // Telefon titrer
-            _showTestOptionsPanel(topicName);
-          },
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: isDark ? Colors.black45 : Colors.grey.withOpacity(0.2),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-              border: Border.all(
-                color: isDark ? Colors.grey.shade600 : Colors.blue,
-                width: 1.2,
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.mediumImpact();
+        _showTestOptionsPanel(topicName);
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF2A2A2A) : Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: isDark ? Colors.grey.shade800 : Colors.grey.shade300,
+            width: 1,
+          ),
+          boxShadow: [
+            if (!isDark)
+              BoxShadow(
+                color: Colors.black.withOpacity(0.03),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
               ),
-            ),
-            child: Center(
-              child: Text(
-                topicName.replaceAll('_', ' ').toUpperCase(),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: isDark ? Colors.white : Colors.black87,
-                ),
-              ),
+          ],
+        ),
+        child: Center(
+          child: Text(
+            topicName.replaceAll('_', ' ').toUpperCase(),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              color: isDark ? Colors.white70 : Colors.black87,
+              letterSpacing: 0.2,
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 
@@ -305,16 +323,26 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
     required VoidCallback onTap,
   }) {
     return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       leading: Icon(icon, color: Colors.indigo),
-      title: Text(text, style: const TextStyle(fontWeight: FontWeight.w500)),
+      title: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
       onTap: onTap,
-      visualDensity: const VisualDensity(horizontal: -2, vertical: -2),
-      horizontalTitleGap: 8,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      hoverColor: Colors.indigo.withOpacity(0.05),
     );
   }
 
   Widget _buildLoginDialog(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Dialog(
+      backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -323,13 +351,22 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
           children: [
             const Icon(Icons.lock_outline, size: 48, color: Colors.indigo),
             const SizedBox(height: 16),
-            const Text("Giriş Gerekli",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text(
+              "Giriş Gerekli",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: isDark ? Colors.white : Colors.black,
+              ),
+            ),
             const SizedBox(height: 12),
-            const Text(
+            Text(
               "Deneme sınavını çözebilmek için lütfen giriş yapın veya kayıt olun.",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: Colors.black87),
+              style: TextStyle(
+                fontSize: 14,
+                color: isDark ? Colors.white70 : Colors.black87,
+              ),
             ),
             const SizedBox(height: 20),
             Row(

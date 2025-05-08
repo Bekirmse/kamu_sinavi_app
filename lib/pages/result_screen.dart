@@ -69,144 +69,154 @@ class _ResultScreenState extends State<ResultScreen> {
     );
 
     return Scaffold(
-      backgroundColor: Theme.of(context).brightness == Brightness.dark
-          ? const Color(0xFF121212)
-          : Colors.white,
-
-      appBar: AppBar(
-          backgroundColor: Theme.of(context).brightness == Brightness.dark
-              ? const Color(0xFF121212)
-              : Colors.white,
-          elevation: 2.0,
-          title: Text(
-            'Sonuçlar',
-            style: GoogleFonts.roboto(
-              fontSize: isTablet ? 28 : 25,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          centerTitle: true,
-          leading: Container()),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Card(
-              color: const Color(0xFFEEF5FF),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              elevation: 5,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  children: [
-                    Icon(
-                      successRate >= 50 ? Icons.emoji_events : Icons.warning,
-                      color: successRate >= 50 ? Colors.green : Colors.red,
-                      size: 40,
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Doğru Cevaplar: $correctAnswers / $totalQuestions',
-                            style: GoogleFonts.roboto(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          Text(
-                            'Başarı Oranı: ${successRate.toStringAsFixed(2)}%',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color:
-                                  successRate >= 50 ? Colors.green : Colors.red,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+        backgroundColor: Theme.of(context).brightness == Brightness.dark
+            ? const Color(0xFF121212)
+            : Colors.white,
+        appBar: AppBar(
+            backgroundColor: Theme.of(context).brightness == Brightness.dark
+                ? const Color(0xFF121212)
+                : Colors.white,
+            elevation: 2.0,
+            title: Text(
+              'Sonuçlar',
+              style: GoogleFonts.roboto(
+                fontSize: isTablet ? 28 : 25,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
               ),
             ),
-
-            const SizedBox(height: 20),
-
-            Expanded(
-              child: _buildAnswersList(questionResults),
-            ),
-
-            const SizedBox(
-                height: 10), // Ana Menü butonu ile Liste arasında boşluk
-
-            // Ana Menü Butonu
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => KamuSinavlariScreen(
-                              isDarkMode:
-                                  false, // Replace with the actual value
-                              onToggleDarkMode: (bool value) {
-                                // Replace with the actual toggle logic
-                              },
-                            )),
-                    (route) => false,
-                  );
-                },
-                icon: const Icon(Icons.home, color: Colors.white),
-                label: Text(
-                  'Ana Menüye Dön',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: isTablet ? 22 : 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.indigo,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+            centerTitle: true,
+            leading: Container()),
+        body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Card(
+                  color: const Color(0xFFEEF5FF),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(16)),
+                  elevation: 5,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Row(
+                      children: [
+                        Icon(
+                          successRate >= 50
+                              ? Icons.emoji_events
+                              : Icons.warning,
+                          color: successRate >= 50 ? Colors.green : Colors.red,
+                          size: 40,
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Doğru Cevaplar: $correctAnswers / $totalQuestions',
+                                style: GoogleFonts.roboto(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              Text(
+                                'Başarı Oranı: ${successRate.toStringAsFixed(2)}%',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: successRate >= 50
+                                      ? Colors.green
+                                      : Colors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                  elevation: 4,
                 ),
-              ),
-            ),
 
-            const SizedBox(
-                height: 105), // Ana Menü Butonu ile FAB arasında boşluk
-          ],
-        ),
-      ),
+                const SizedBox(height: 20),
 
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerFloat, // FAB'i ortada tut
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Wiredash.of(context).show();
-        },
-        backgroundColor: Colors.deepOrange,
-        icon: const Icon(Icons.feedback, color: Colors.white),
-        label: const Text(
-          "Geri Bildirim",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
+                Expanded(
+                  child: _buildAnswersList(questionResults),
+                ),
+
+                const SizedBox(
+                    height: 10), // Ana Menü butonu ile Liste arasında boşluk
+
+                // Ana Menü Butonu
+                Padding(
+                  padding:
+                      const EdgeInsets.only(bottom: 24), // Alt boşluk eklendi
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => KamuSinavlariScreen(
+                                  isDarkMode: false,
+                                  onToggleDarkMode: (_) {},
+                                ),
+                              ),
+                              (route) => false,
+                            );
+                          },
+                          icon: const Icon(Icons.home, color: Colors.white),
+                          label: Text(
+                            'Ana Menü',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: isTablet ? 18 : 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.indigo,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            Wiredash.of(context).show();
+                          },
+                          icon: const Icon(Icons.feedback, color: Colors.white),
+                          label: const Text(
+                            "Geri Bildirim",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.deepOrange,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )));
   }
 }
 

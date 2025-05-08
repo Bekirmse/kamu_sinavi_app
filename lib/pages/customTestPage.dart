@@ -1,4 +1,3 @@
-// Flutter'ın context kullanımı ve bazı linter uyarılarını kapatıyoruz
 // ignore_for_file: use_build_context_synchronously, avoid_types_as_parameter_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:kamu_sinavi_app/models/question.dart';
 import 'package:kamu_sinavi_app/pages/test_screen.dart';
 
-// Kullanıcının kendi testini oluşturabileceği ekran
 class CustomTestScreen extends StatefulWidget {
   const CustomTestScreen({super.key});
 
@@ -16,38 +14,43 @@ class CustomTestScreen extends StatefulWidget {
 }
 
 class _CustomTestScreenState extends State<CustomTestScreen> {
-  List<String> selectedTopics = []; // Seçilen konu başlıkları
-  int selectedQuestionCount = 10; // Kaç soru olacak
-  int selectedDuration = 10; // Test süresi (dakika)
-  bool isLoading = false; // Yükleniyor durumu (buton animasyonu için)
+  List<String> selectedTopics = [];
+  int selectedQuestionCount = 10;
+  int selectedDuration = 10;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F9FC),
+      backgroundColor:
+          isDark ? const Color(0xFF121212) : const Color(0xFFF7F9FC),
       appBar: AppBar(
-        title: const Text("Kendi Testini Oluştur",
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
-        backgroundColor: Colors.white,
+        title: Text(
+          "Kendi Testini Oluştur",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: isDark ? Colors.white : Colors.black,
+          ),
+        ),
+        backgroundColor: isDark ? const Color(0xFF1F1F1F) : Colors.white,
         elevation: 1,
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: isDark ? Colors.white : Colors.black),
       ),
       body: FutureBuilder<QuerySnapshot>(
-        // Firestore'daki tüm konuları getiriyoruz
         future: FirebaseFirestore.instance.collection('questions').get(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          // Firestore'dan gelen tüm konu ID'leri (koleksiyon adları)
           final topics = snapshot.data!.docs.map((doc) => doc.id).toList();
 
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              // Konular seçim kartı
               _buildCard(
                 title: "📚 Konular",
                 child: Wrap(
@@ -60,11 +63,17 @@ class _CustomTestScreenState extends State<CustomTestScreen> {
                         topic.replaceAll("_", " ").toUpperCase(),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: isSelected ? Colors.white : Colors.black87,
+                          color: isSelected
+                              ? Colors.white
+                              : isDark
+                                  ? Colors.white
+                                  : Colors.black87,
                         ),
                       ),
                       selected: isSelected,
                       selectedColor: Colors.indigo,
+                      backgroundColor:
+                          isDark ? Colors.grey[800] : Colors.grey[200],
                       onSelected: (val) {
                         setState(() {
                           if (val) {
@@ -77,10 +86,9 @@ class _CustomTestScreenState extends State<CustomTestScreen> {
                     );
                   }).toList(),
                 ),
+                isDark: isDark,
               ),
               const SizedBox(height: 12),
-
-              // Soru sayısı seçim kartı
               _buildCard(
                 title: "❓ Soru Sayısı",
                 child: Row(
@@ -94,11 +102,15 @@ class _CustomTestScreenState extends State<CustomTestScreen> {
                           style: TextStyle(
                             color: selectedQuestionCount == count
                                 ? Colors.white
-                                : Colors.black87,
+                                : isDark
+                                    ? Colors.white70
+                                    : Colors.black,
                           ),
                         ),
                         selected: selectedQuestionCount == count,
                         selectedColor: Colors.indigo,
+                        backgroundColor:
+                            isDark ? Colors.grey[800] : Colors.grey[200],
                         onSelected: (val) {
                           setState(() => selectedQuestionCount = count);
                         },
@@ -106,10 +118,9 @@ class _CustomTestScreenState extends State<CustomTestScreen> {
                     );
                   }).toList(),
                 ),
+                isDark: isDark,
               ),
               const SizedBox(height: 12),
-
-              // Süre seçimi kartı (slider ile)
               _buildCard(
                 title: "⏱ Süre (dakika)",
                 child: Column(
@@ -133,10 +144,9 @@ class _CustomTestScreenState extends State<CustomTestScreen> {
                     ),
                   ],
                 ),
+                isDark: isDark,
               ),
               const SizedBox(height: 20),
-
-              // "Testi Başlat" butonu
               Center(
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
@@ -163,16 +173,16 @@ class _CustomTestScreenState extends State<CustomTestScreen> {
                   onPressed: isLoading ? null : _startCustomTest,
                 ),
               ),
-
               const SizedBox(height: 10),
-
-              // Seçilen konuları küçük yazıyla göster
               if (selectedTopics.isNotEmpty)
                 Center(
                   child: Text(
                     "Seçilen Konular: ${selectedTopics.map((e) => e.replaceAll("_", " ").toUpperCase()).join(", ")}",
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: isDark ? Colors.grey[400] : Colors.grey,
+                    ),
                   ),
                 ),
             ],
@@ -182,9 +192,10 @@ class _CustomTestScreenState extends State<CustomTestScreen> {
     );
   }
 
-  // Kart tasarımı oluşturan yardımcı metod
-  Widget _buildCard({required String title, required Widget child}) {
+  Widget _buildCard(
+      {required String title, required Widget child, required bool isDark}) {
     return Card(
+      color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
@@ -192,9 +203,14 @@ class _CustomTestScreenState extends State<CustomTestScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: isDark ? Colors.white : Colors.black,
+              ),
+            ),
             const SizedBox(height: 12),
             child,
           ],
@@ -203,9 +219,7 @@ class _CustomTestScreenState extends State<CustomTestScreen> {
     );
   }
 
-  // Testi başlatan fonksiyon
   Future<void> _startCustomTest() async {
-    // En az 2 konu seçilmesi gerekiyor
     if (selectedTopics.length < 2) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Lütfen en az 2 konu seçin.")),
@@ -213,14 +227,12 @@ class _CustomTestScreenState extends State<CustomTestScreen> {
       return;
     }
 
-    // Yükleniyor animasyonu başlat
     setState(() {
       isLoading = true;
     });
 
     List<Question> allQuestions = [];
 
-    // Seçilen her konudan soruları al
     for (String topic in selectedTopics) {
       final snapshot = await FirebaseFirestore.instance
           .collection('questions')
@@ -233,7 +245,6 @@ class _CustomTestScreenState extends State<CustomTestScreen> {
       allQuestions.addAll(questions);
     }
 
-    // Eğer hiç soru gelmezse uyarı göster
     if (allQuestions.isEmpty) {
       setState(() {
         isLoading = false;
@@ -244,7 +255,6 @@ class _CustomTestScreenState extends State<CustomTestScreen> {
       return;
     }
 
-    // Soruları karıştır ve seçilen sayı kadar al
     allQuestions.shuffle();
     final selected = allQuestions.take(selectedQuestionCount).toList();
 
@@ -252,7 +262,6 @@ class _CustomTestScreenState extends State<CustomTestScreen> {
       isLoading = false;
     });
 
-    // Test ekranına yönlendir
     Navigator.push(
       context,
       MaterialPageRoute(

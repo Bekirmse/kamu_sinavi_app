@@ -60,7 +60,6 @@ class _LoginPageState extends State<LoginPage> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('rememberMe', _rememberMe);
 
-      // ✅ Kullanıcıyı online olarak işaretle
       final dbRef =
           FirebaseDatabase.instance.ref('presence/${credential.user!.uid}');
       await dbRef.set({'online': true});
@@ -91,8 +90,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: isDark ? const Color(0xFF121212) : Colors.grey.shade50,
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -102,22 +103,28 @@ class _LoginPageState extends State<LoginPage> {
               const Icon(Icons.lock_outline,
                   size: 80, color: Colors.blueAccent),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 "Kullanıcı Girişi",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Colors.white : Colors.black,
+                ),
               ),
               const SizedBox(height: 32),
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: _inputDecoration("E-posta adresi"),
+                style: TextStyle(color: isDark ? Colors.white : Colors.black),
+                decoration: _inputDecoration("E-posta adresi", isDark),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _passwordController,
                 obscureText: _obscureText,
-                decoration: _inputDecoration("Şifre").copyWith(
+                style: TextStyle(color: isDark ? Colors.white : Colors.black),
+                decoration: _inputDecoration("Şifre", isDark).copyWith(
                   suffixIcon: IconButton(
                     icon: Icon(
                         _obscureText ? Icons.visibility_off : Icons.visibility),
@@ -137,7 +144,9 @@ class _LoginPageState extends State<LoginPage> {
                         onChanged: (val) =>
                             setState(() => _rememberMe = val ?? false),
                       ),
-                      const Text("Beni Hatırla"),
+                      Text("Beni Hatırla",
+                          style: TextStyle(
+                              color: isDark ? Colors.white70 : Colors.black)),
                     ],
                   ),
                   TextButton(
@@ -176,6 +185,19 @@ class _LoginPageState extends State<LoginPage> {
                 child: const Text("Henüz hesabınız yok mu? Kayıt Ol",
                     style: TextStyle(color: Colors.blueAccent)),
               ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, "/");
+                },
+                child: const Text(
+                  "Giriş yapmadan devam et",
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontStyle: FontStyle.italic,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -183,11 +205,16 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  InputDecoration _inputDecoration(String label) => InputDecoration(
+  InputDecoration _inputDecoration(String label, bool isDark) =>
+      InputDecoration(
         labelText: label,
+        labelStyle:
+            TextStyle(color: isDark ? Colors.white70 : Colors.grey.shade700),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         contentPadding:
             const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        fillColor: isDark ? const Color(0xFF2A2A2A) : Colors.white,
+        filled: true,
       );
 
   String getErrorMessage(String code) =>

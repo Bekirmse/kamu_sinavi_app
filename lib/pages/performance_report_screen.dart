@@ -66,6 +66,7 @@ class _PerformanceReportScreenState extends State<PerformanceReportScreen> {
   @override
   Widget build(BuildContext context) {
     final bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       backgroundColor: Theme.of(context).brightness == Brightness.dark
@@ -144,9 +145,10 @@ class _PerformanceReportScreenState extends State<PerformanceReportScreen> {
               child: Text(
                 'Henüz tamamlanan test bulunmamaktadır.',
                 style: TextStyle(
-                    fontSize: isTablet ? 24 : 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black54),
+                  fontSize: isTablet ? 24 : 18,
+                  fontWeight: FontWeight.w500,
+                  color: isDark ? Colors.white70 : Colors.black54,
+                ),
                 textAlign: TextAlign.center,
               ),
             )
@@ -293,8 +295,8 @@ class _PerformanceReportScreenState extends State<PerformanceReportScreen> {
                                                   ? (Theme.of(context)
                                                               .brightness ==
                                                           Brightness.dark
-                                                      ? Colors
-                                                          .greenAccent.shade100
+                                                      ? const Color.fromARGB(
+                                                          255, 53, 168, 89)
                                                       : Colors.green[700])
                                                   : (Theme.of(context)
                                                               .brightness ==
