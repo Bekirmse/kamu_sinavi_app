@@ -6,12 +6,9 @@ list(APPEND FLUTTER_PLUGIN_LIST
   cloud_firestore
   connectivity_plus
   emoji_picker_flutter
-  file_selector_windows
   firebase_auth
   firebase_core
   firebase_storage
-  flutter_localization
-  rive_common
   url_launcher_windows
 )
 
