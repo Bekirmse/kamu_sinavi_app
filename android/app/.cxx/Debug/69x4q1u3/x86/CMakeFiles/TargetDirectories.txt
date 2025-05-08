@@ -1,0 +1,2 @@
+/Users/machome/FlutterProjects/kamu_sinavi_app/android/app/.cxx/Debug/69x4q1u3/x86/CMakeFiles/rebuild_cache.dir
+/Users/machome/FlutterProjects/kamu_sinavi_app/android/app/.cxx/Debug/69x4q1u3/x86/CMakeFiles/edit_cache.dir

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "241474592559",
+    "project_id": "kamucep-f819e",
+    "storage_bucket": "kamucep-f819e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:241474592559:android:83e6f9c383cb0832518bda",
+        "android_client_info": {
+          "package_name": "com.example.kamu_sinavi_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjeVxd11ggozzWgzRqJxjKMvQ6wdugTR4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

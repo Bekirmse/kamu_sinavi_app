@@ -1,0 +1,30 @@
+com.example.kamu_sinavi_app-jetified-window-java-1.0.0-beta04-0 /Users/machome/.gradle/caches/transforms-3/2a215381204751055df81b6269e717b7/transformed/jetified-window-java-1.0.0-beta04/res
+com.example.kamu_sinavi_app-appcompat-1.6.1-1 /Users/machome/.gradle/caches/transforms-3/6069f4c6c6d3d601c161ff9cc2d8fbc6/transformed/appcompat-1.6.1/res
+com.example.kamu_sinavi_app-jetified-savedstate-1.2.0-2 /Users/machome/.gradle/caches/transforms-3/665fca8435dc72bae54e6cdecadba5a1/transformed/jetified-savedstate-1.2.0/res
+com.example.kamu_sinavi_app-lifecycle-viewmodel-2.5.1-3 /Users/machome/.gradle/caches/transforms-3/6895a0b3cd4d3a94900e470cbd975ba9/transformed/lifecycle-viewmodel-2.5.1/res
+com.example.kamu_sinavi_app-jetified-startup-runtime-1.1.1-4 /Users/machome/.gradle/caches/transforms-3/69635902d600ff315c2d2b7f75af662f/transformed/jetified-startup-runtime-1.1.1/res
+com.example.kamu_sinavi_app-fragment-1.3.6-5 /Users/machome/.gradle/caches/transforms-3/787ace12ce7cebf954d6f7843ac58d8c/transformed/fragment-1.3.6/res
+com.example.kamu_sinavi_app-jetified-activity-1.6.0-6 /Users/machome/.gradle/caches/transforms-3/8303c21248d96ce3fb02798878079619/transformed/jetified-activity-1.6.0/res
+com.example.kamu_sinavi_app-lifecycle-runtime-2.5.1-7 /Users/machome/.gradle/caches/transforms-3/8f0686382cdc5d356eb461e38f382ab1/transformed/lifecycle-runtime-2.5.1/res
+com.example.kamu_sinavi_app-jetified-core-ktx-1.9.0-8 /Users/machome/.gradle/caches/transforms-3/a9321fb2fbef2167a78dd2214c195207/transformed/jetified-core-ktx-1.9.0/res
+com.example.kamu_sinavi_app-jetified-emoji2-views-helper-1.2.0-9 /Users/machome/.gradle/caches/transforms-3/b95d11feab3b5270a320d739b5122bb4/transformed/jetified-emoji2-views-helper-1.2.0/res
+com.example.kamu_sinavi_app-core-1.9.0-10 /Users/machome/.gradle/caches/transforms-3/cd029caa73742c9274e432966ee47c8f/transformed/core-1.9.0/res
+com.example.kamu_sinavi_app-jetified-annotation-experimental-1.3.0-11 /Users/machome/.gradle/caches/transforms-3/cf1dbdbeca5961b0be70c71293909f9a/transformed/jetified-annotation-experimental-1.3.0/res
+com.example.kamu_sinavi_app-jetified-lifecycle-process-2.4.1-12 /Users/machome/.gradle/caches/transforms-3/cfdc98f5aeae66cfadfcaab37ee52c42/transformed/jetified-lifecycle-process-2.4.1/res
+com.example.kamu_sinavi_app-jetified-lifecycle-viewmodel-savedstate-2.5.1-13 /Users/machome/.gradle/caches/transforms-3/d403db56602dc3e082d9aea9c81a00e6/transformed/jetified-lifecycle-viewmodel-savedstate-2.5.1/res
+com.example.kamu_sinavi_app-lifecycle-livedata-core-2.5.1-14 /Users/machome/.gradle/caches/transforms-3/d8f09561c5de50830e7e2d3c20e49044/transformed/lifecycle-livedata-core-2.5.1/res
+com.example.kamu_sinavi_app-jetified-appcompat-resources-1.6.1-15 /Users/machome/.gradle/caches/transforms-3/e11d2eeb08368fb667e2042af1192d7b/transformed/jetified-appcompat-resources-1.6.1/res
+com.example.kamu_sinavi_app-jetified-window-1.0.0-beta04-16 /Users/machome/.gradle/caches/transforms-3/f302e75fb7efd781bcf1a29281c188da/transformed/jetified-window-1.0.0-beta04/res
+com.example.kamu_sinavi_app-jetified-emoji2-1.2.0-17 /Users/machome/.gradle/caches/transforms-3/fd5566ded44aaffd1a50ecce95aa3bb6/transformed/jetified-emoji2-1.2.0/res
+com.example.kamu_sinavi_app-packaged_res-18 /Users/machome/.pub-cache/hosted/pub.dev/connectivity_plus-6.0.3/android/build/intermediates/packaged_res/release
+com.example.kamu_sinavi_app-packaged_res-19 /Users/machome/.pub-cache/hosted/pub.dev/flutter_email_sender-6.0.3/android/build/intermediates/packaged_res/release
+com.example.kamu_sinavi_app-packaged_res-20 /Users/machome/.pub-cache/hosted/pub.dev/path_provider_android-2.2.6/android/build/intermediates/packaged_res/release
+com.example.kamu_sinavi_app-packaged_res-21 /Users/machome/.pub-cache/hosted/pub.dev/shared_preferences_android-2.2.3/android/build/intermediates/packaged_res/release
+com.example.kamu_sinavi_app-pngs-22 /Users/machome/Flutter Projects/kamu_sinavi_app/android/app/build/generated/res/pngs/release
+com.example.kamu_sinavi_app-resValues-23 /Users/machome/Flutter Projects/kamu_sinavi_app/android/app/build/generated/res/resValues/release
+com.example.kamu_sinavi_app-rs-24 /Users/machome/Flutter Projects/kamu_sinavi_app/android/app/build/generated/res/rs/release
+com.example.kamu_sinavi_app-mergeReleaseResources-25 /Users/machome/Flutter Projects/kamu_sinavi_app/android/app/build/intermediates/incremental/release/mergeReleaseResources/merged.dir
+com.example.kamu_sinavi_app-mergeReleaseResources-26 /Users/machome/Flutter Projects/kamu_sinavi_app/android/app/build/intermediates/incremental/release/mergeReleaseResources/stripped.dir
+com.example.kamu_sinavi_app-merged_res-27 /Users/machome/Flutter Projects/kamu_sinavi_app/android/app/build/intermediates/merged_res/release
+com.example.kamu_sinavi_app-main-28 /Users/machome/Flutter Projects/kamu_sinavi_app/android/app/src/main/res
+com.example.kamu_sinavi_app-release-29 /Users/machome/Flutter Projects/kamu_sinavi_app/android/app/src/release/res

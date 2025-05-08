@@ -1,0 +1,8 @@
+flutter_native_splash:
+  android: true
+  ios: true
+
+  color: '#074299'
+
+
+  image: "assets/icons/kamucepicon2.png"
