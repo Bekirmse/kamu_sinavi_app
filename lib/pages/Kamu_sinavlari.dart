@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show HapticFeedback;
+import 'package:flutter/services.dart';
 import 'package:kamu_sinavi_app/models/question.dart';
 import 'package:kamu_sinavi_app/pages/notlarim_screen.dart';
 import 'package:kamu_sinavi_app/pages/customTestpAGE.dart';
@@ -52,7 +52,10 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
       backgroundColor: Theme.of(context).brightness == Brightness.dark
           ? const Color(0xFF121212)
           : Colors.white,
-      drawer: _buildDrawer(), // Sol menü
+      drawer: _buildDrawer(),
+      onDrawerChanged: (isOpened) {
+        if (isOpened) {}
+      }, // Sol menü
       appBar: AppBar(
         title: Text(
           "K A M U C E P",
@@ -160,6 +163,7 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
                     letterSpacing: 5,
                   ),
                 ),
+                const SizedBox(height: 2),
               ],
             ),
           ),
@@ -172,7 +176,6 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
                   icon: Icons.shuffle,
                   text: "Kendi Testini Oluştur",
                   onTap: () {
-                    HapticFeedback.mediumImpact();
                     Navigator.pop(context);
                     Navigator.push(
                       context,
@@ -185,7 +188,6 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
                   icon: Icons.quiz,
                   text: "Deneme Sınavı",
                   onTap: () {
-                    HapticFeedback.mediumImpact();
                     Navigator.pop(context);
                     if (user == null) {
                       showDialog(
@@ -205,7 +207,6 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
                   icon: Icons.chat,
                   text: "Canlı Destek",
                   onTap: () {
-                    HapticFeedback.mediumImpact();
                     Navigator.pop(context);
                     Navigator.push(
                       context,
@@ -218,7 +219,6 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
                   icon: Icons.notifications_active,
                   text: "Bildirimler",
                   onTap: () {
-                    HapticFeedback.mediumImpact();
                     Navigator.pop(context);
                     showNotificationsPanel(context);
                   },
@@ -227,7 +227,6 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
                   icon: Icons.note_alt_outlined,
                   text: "Notlarım",
                   onTap: () {
-                    HapticFeedback.mediumImpact();
                     Navigator.pop(context);
                     Navigator.push(
                       context,
@@ -239,7 +238,6 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
                   icon: Icons.history,
                   text: "Geçmiş",
                   onTap: () {
-                    HapticFeedback.mediumImpact();
                     Navigator.pop(context);
                     Navigator.push(
                       context,
@@ -252,7 +250,6 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
                   icon: Icons.settings,
                   text: "Ayarlar",
                   onTap: () {
-                    HapticFeedback.mediumImpact();
                     Navigator.pop(context);
                     Navigator.push(
                       context,
@@ -279,8 +276,39 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
 
     return GestureDetector(
       onTap: () {
-        HapticFeedback.mediumImpact();
         _showTestOptionsPanel(topicName);
+      },
+      onLongPress: () async {
+        try {
+          final snapshot = await FirebaseFirestore.instance
+              .collection('questions')
+              .doc(topicName)
+              .collection('questionList')
+              .get();
+
+          final count = snapshot.size;
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "$topicName konusunda $count soru var.",
+                style: const TextStyle(fontWeight: FontWeight.w500),
+              ),
+              duration: const Duration(seconds: 3),
+              backgroundColor: Colors.indigo.shade700,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            ),
+          );
+        } catch (e) {
+          debugPrint("Soru sayısı alınamadı: $e");
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Soru sayısı alınırken hata oluştu.")),
+          );
+        }
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
@@ -443,8 +471,8 @@ class _KamuSinavlariScreenState extends State<KamuSinavlariScreen> {
                     Switch.adaptive(
                       value: _isTimerEnabled,
                       onChanged: (val) {
-                        setState(() => _isTimerEnabled = val);
                         HapticFeedback.mediumImpact(); // Telefon titrer
+                        setState(() => _isTimerEnabled = val);
                       },
                     ),
                   ],

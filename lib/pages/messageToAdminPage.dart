@@ -84,8 +84,18 @@ class _MessageToAdminPageState extends State<MessageToAdminPage> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     if (user == null) {
+      Future.delayed(const Duration(seconds: 3), () {
+        Navigator.pushReplacementNamed(context, '/');
+      });
+
       return const Scaffold(
-        body: Center(child: Text("Giriş yapmalısınız.")),
+        body: Center(
+          child: Text(
+            "Bu bölüme erişebilmek için önce giriş yapmalısınız.\n\nAna sayfaya yönlendiriliyorsunuz...",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+        ),
       );
     }
 

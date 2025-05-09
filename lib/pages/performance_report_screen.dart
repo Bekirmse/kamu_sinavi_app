@@ -43,7 +43,7 @@ class _PerformanceReportScreenState extends State<PerformanceReportScreen> {
                     fontWeight: FontWeight.w500,
                     color: Theme.of(context).brightness == Brightness.dark
                         ? Colors.white
-                        : Colors.black87,
+                        : const Color.fromARGB(221, 255, 255, 255),
                   ),
                 ),
                 backgroundColor: Colors.blue.shade600,

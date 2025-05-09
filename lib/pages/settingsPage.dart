@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 
 class SettingsPage extends StatefulWidget {
   final bool isDarkMode;
@@ -202,13 +203,14 @@ class _SettingsPageState extends State<SettingsPage> {
             title: "Genel Ayarlar",
             children: [
               SwitchListTile(
-                title: Text("Koyu Mod"),
+                title: const Text("Koyu Mod"),
                 value: _localDarkMode,
                 onChanged: (val) {
+                  HapticFeedback.mediumImpact(); // Telefon titrer
                   setState(() => _localDarkMode = val);
                   widget.onToggleDarkMode(val);
                 },
-                secondary: Icon(Icons.dark_mode),
+                secondary: const Icon(Icons.dark_mode),
               ),
             ],
           ),

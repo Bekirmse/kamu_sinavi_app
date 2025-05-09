@@ -75,6 +75,7 @@ class _CustomTestScreenState extends State<CustomTestScreen> {
                       backgroundColor:
                           isDark ? Colors.grey[800] : Colors.grey[200],
                       onSelected: (val) {
+                        HapticFeedback.mediumImpact(); // Telefon titrer
                         setState(() {
                           if (val) {
                             selectedTopics.add(topic);
@@ -112,6 +113,7 @@ class _CustomTestScreenState extends State<CustomTestScreen> {
                         backgroundColor:
                             isDark ? Colors.grey[800] : Colors.grey[200],
                         onSelected: (val) {
+                          HapticFeedback.mediumImpact(); // Telefon titrer
                           setState(() => selectedQuestionCount = count);
                         },
                       ),
@@ -170,7 +172,12 @@ class _CustomTestScreenState extends State<CustomTestScreen> {
                     isLoading ? "Test oluşturuluyor..." : "Testi Başlat",
                     style: const TextStyle(fontSize: 16, color: Colors.white),
                   ),
-                  onPressed: isLoading ? null : _startCustomTest,
+                  onPressed: isLoading
+                      ? null
+                      : () {
+                          HapticFeedback.mediumImpact(); // Telefon titrer
+                          _startCustomTest();
+                        },
                 ),
               ),
               const SizedBox(height: 10),
